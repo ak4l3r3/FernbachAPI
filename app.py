@@ -127,14 +127,14 @@ def get_one_user(current_user, public_id):
 @app.route('/api/v1/user', methods=['POST'])
 @token_required
 def create_user():
-"""
+    data = request.get_json()
+    """
     if not current_user.admin:
         return jsonify({'message' : 'Cannot perform that action. Need username and password parameters.'})
-"""
-    data = request.get_json()
-### Change the hashing type? MD5 ####
+    """
+    ### Change the hashing type? MD5 ####
     hashed_password = generate_password_hash(data['password'], method='md5')
-### Use a guessable UUID that is not random but auto increments ####
+    ### Use a guessable UUID that is not random but auto increments ####
     new_user = User(public_id=str(uuid.uuid4()), name=data['name'], password=hashed_password, admin=False)
     db.session.add(new_user)
     db.session.commit()
